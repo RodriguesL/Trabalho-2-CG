@@ -1,5 +1,8 @@
+#https://stackoverflow.com/questions/38640395/pyopengl-tessellating-polygons
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from geometry import *
 
 def triangulate(polygon, holes=[]):
     """
@@ -28,19 +31,19 @@ def triangulate(polygon, holes=[]):
 
     #first handle the main polygon
     gluTessBeginContour(tess)
-    for point in polygon:
-        point3d = (point[0], point[1], 0)
-        gluTessVertex(tess, point3d, point3d)
+    for point in polygon.points:
+        point3d = Point(point.x, point.y, 0.0)
+        gluTessVertex(tess, (point3d.x, point3d.y, point3d.z), (point3d.x, point3d.y, point3d.z))
     gluTessEndContour(tess)
 
     #then handle each of the holes, if applicable
-    if holes != []:
-        for hole in holes:
-            gluTessBeginContour(tess)
-            for point in hole:
-                point3d = (point[0], point[1], 0)
-                gluTessVertex(tess, point3d, point3d)
-            gluTessEndContour(tess)
+    # if holes != []:
+    #     for hole in holes:
+    #         gluTessBeginContour(tess)
+    #         for point in hole:
+    #             point3d = (point[0], point[1], 0)
+    #             gluTessVertex(tess, point3d, point3d)
+    #         gluTessEndContour(tess)
 
     gluTessEndPolygon(tess)
     gluDeleteTess(tess)

@@ -48,7 +48,13 @@ def renderScene ():
 	glPushMatrix()
 	glMatrixMode (GL_PROJECTION)
 	gluOrtho2D (0.0, width, height, 0.0)
-	
+	polygon = Polygon([Point(0, 0), Point(550, 0), Point(550, 400), Point(275, 200), Point(0, 400)])
+	vertices = triangulate(polygon)
+	glBegin(GL_TRIANGLES)
+	glColor3f(255.0, 255.0, 0.0)
+	for point in vertices:
+		glVertex3f(point[0], point[1], 0.0)
+	glEnd()
 	glPopMatrix()
 	glutSwapBuffers()
 	glutPostRedisplay()
@@ -69,12 +75,6 @@ def main(argv = None):
 	glMatrixMode(GL_PROJECTION)
 	gluOrtho2D(0.0, width, height, 0.0)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-	polygon = triangulate(Polygon([Point(0, 0), Point(550, 0), Point(550, 400), Point(275, 200), Point(0, 400)]))
-	glBegin(GL_TRIANGLES)
-	glColor3f(255.0, 255.0, 0.0)
-	for point in polygon:
-		glVertex2f(*point)
-	glEnd()
 	glutSwapBuffers()
 	glutMouseFunc(myMouse)
 	#glutPassiveMotionFunc(mouseDrag)
