@@ -3,15 +3,26 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 import sys
 from geometry import *
-from random import uniform
 from triangulate import *
+
+
+global height
+global width
 
 width = 800
 height = 600
 
+
+class DegeneratedLine:
+	def __init__(self, point):
+		self.startPoint = point
+		self.endPoint = Point(self.startPoint.x, self.startPoint.y)
+
+tempLine = DegeneratedLine(Point(0,0))
 polygons = []
 vertices = []
 clicked = False
+currentPolygon = []
 
 def changeSize(w, h):
 
@@ -33,14 +44,27 @@ def changeSize(w, h):
 
 def myMouse (button, state, x, y):
 	point = Point(x, y)
-	currentPoint = (point, point)
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+		clicked = True 
 		print(point.x, point.y)
+		tempLine = DegeneratedLine(point)
+		currentPolygon.append(point)
 		vertices.append(point)
+		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 20:
+			del vertices[-1]
+			currentPolygon[-1] = currentPolygon[0]
+			clicked = False
+			tempLine = DegeneratedLine(Point(0,0))
+			poly = Polygon(currentPolygon[:])
+			polygons.append(poly)
+			del currentPolygon[:]
+
 
 def mouseDrag (x, y):
-
-	glutPostRedisplay();
+	if(clicked):
+		tempLine.endPoint.x = x
+		tempLine.endPoint.y = y
+	glutPostRedisplay()
 
 
 def renderScene ():
@@ -48,13 +72,29 @@ def renderScene ():
 	glPushMatrix()
 	glMatrixMode (GL_PROJECTION)
 	gluOrtho2D (0.0, width, height, 0.0)
-	polygon = Polygon([Point(0, 0), Point(550, 0), Point(550, 400), Point(275, 200), Point(0, 400)])
-	vertices = triangulate(polygon)
-	glBegin(GL_TRIANGLES)
-	glColor3f(255.0, 255.0, 0.0)
-	for point in vertices:
-		glVertex3f(point[0], point[1], 0.0)
+	glLineWidth(3.0)
+	glBegin(GL_LINES)
+	for i in range(1, len(currentPolygon)):
+		glColor3f(255.0, 0, 255.0)
+		glVertex3f(currentPolygon[i-1].x, currentPolygon[i-1].y, 0.0)
+		glVertex3f(currentPolygon[i].x, currentPolygon[i].y, 0.0)
 	glEnd()
+	glLineWidth(3.0)
+	glBegin(GL_LINES)
+	glColor3f(0, 255.0, 255.0)
+	glVertex3f(tempLine.startPoint.x, tempLine.startPoint.y, 0.0)
+	glVertex3f(tempLine.endPoint.x, tempLine.endPoint.y, 0.0)
+	glEnd()
+	for polygon in polygons:
+		glBegin(GL_POLYGON)	
+		for polygonPoint in polygon.points:
+			glColor3f(0, 0, 255)
+			glVertex3f(polygonPoint.x, polygonPoint.y, 0)
+		glEnd()
+	
+
+
+
 	glPopMatrix()
 	glutSwapBuffers()
 	glutPostRedisplay()
@@ -77,9 +117,10 @@ def main(argv = None):
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glutSwapBuffers()
 	glutMouseFunc(myMouse)
-	#glutPassiveMotionFunc(mouseDrag)
+	glutPassiveMotionFunc(mouseDrag)
 	glutReshapeFunc(changeSize)
 	glutDisplayFunc(renderScene)
+	glutIdleFunc(renderScene)
 	glutMainLoop()
 
 if __name__=="__main__":
