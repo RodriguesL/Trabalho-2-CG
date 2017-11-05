@@ -5,10 +5,6 @@ import sys
 from geometry import *
 from triangulate import *
 
-
-global height
-global width
-
 width = 800
 height = 600
 
@@ -36,6 +32,8 @@ def changeSize(w, h):
 	# Reset the coordinate system before modifying
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()
+	global height
+	global width
 	
 	# Set the viewport to be the entire window
 	width = w
@@ -43,6 +41,10 @@ def changeSize(w, h):
 	glViewport(0, 0, w, h)
 
 def myMouse (button, state, x, y):
+	global currentPolygon
+	global vertices
+	global clicked
+	global tempLine
 	point = Point(x, y)
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
 		clicked = True 
@@ -56,6 +58,7 @@ def myMouse (button, state, x, y):
 			clicked = False
 			tempLine = DegeneratedLine(Point(0,0))
 			poly = Polygon(currentPolygon[:])
+			print(poly.isConvex())
 			polygons.append(poly)
 			del currentPolygon[:]
 
@@ -75,7 +78,7 @@ def renderScene ():
 	glLineWidth(3.0)
 	glBegin(GL_LINES)
 	for i in range(1, len(currentPolygon)):
-		glColor3f(255.0, 0, 255.0)
+		glColor3f(0, 255.0, 255.0)
 		glVertex3f(currentPolygon[i-1].x, currentPolygon[i-1].y, 0.0)
 		glVertex3f(currentPolygon[i].x, currentPolygon[i].y, 0.0)
 	glEnd()
