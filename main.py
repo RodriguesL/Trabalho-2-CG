@@ -4,13 +4,13 @@ from OpenGL.GL import *
 import sys
 from geometry import *
 from random import uniform
+from triangulate import *
 
 width = 800
 height = 600
 
 polygons = []
 vertices = []
-tempLine = Line(Point(0,0))
 clicked = False
 
 def changeSize(w, h):
@@ -48,13 +48,7 @@ def renderScene ():
 	glPushMatrix()
 	glMatrixMode (GL_PROJECTION)
 	gluOrtho2D (0.0, width, height, 0.0)
-	glPointSize(5.0)
-	vertices = tess.tessellate([Point(1,0,0), Point(0,1,0), Point(1./3,1./3,1./3), Point(0,0,1)])
-	glBegin(GL_POLYGON)
-	glColor3f(255.0, 0.0, 0.0)
-	for vertex in vertices:
-		glVertex3f(vertex.x, vertex.y, vertex.z)
-	glEnd()
+	
 	glPopMatrix()
 	glutSwapBuffers()
 	glutPostRedisplay()
@@ -75,6 +69,12 @@ def main(argv = None):
 	glMatrixMode(GL_PROJECTION)
 	gluOrtho2D(0.0, width, height, 0.0)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+	polygon = triangulate(Polygon([Point(0, 0), Point(550, 0), Point(550, 400), Point(275, 200), Point(0, 400)]))
+	glBegin(GL_TRIANGLES)
+	glColor3f(255.0, 255.0, 0.0)
+	for point in polygon:
+		glVertex2f(*point)
+	glEnd()
 	glutSwapBuffers()
 	glutMouseFunc(myMouse)
 	#glutPassiveMotionFunc(mouseDrag)
