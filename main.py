@@ -9,6 +9,18 @@ from tessellator import *
 width = 800
 height = 600
 
+class ColoredPolygon(Polygon):
+	def __init__(self,points, r, g, b):
+		super(ColoredPolygon, self ).__init__(points)
+		self.r = r
+		self.g = g
+		self.b = b
+
+	def setColor(self, r, g, b):
+		self.r = r
+		self.g = g
+		self.b = b	
+
 
 class DegeneratedLine:
 	def __init__(self, point):
@@ -53,14 +65,13 @@ def myMouse (button, state, x, y):
 		tempLine = DegeneratedLine(point)
 		currentPolygon.append(point)
 		vertices.append(point)
-		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 5:
+		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 8:
 			del vertices[-1]
 			del currentPolygon[-1]
 			clicked = False
 			tempLine = DegeneratedLine(Point(0,0))
-			poly = Polygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
+			poly = ColoredPolygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
 			print(poly.isConvex())
-			tessellate(poly)
 			polygons.append(poly)
 			del currentPolygon[:]
 
@@ -96,13 +107,9 @@ def renderScene ():
 	glVertex3f(tempLine.endPoint.x, tempLine.endPoint.y, 0.0)
 	glEnd()
 	for polygon in polygons:
-		global test
-		test = tessellate(polygon)
-		glCallList(test)
-	
-
-
-
+		global tess
+		tess = tessellate(polygon)
+		glCallList(tess)
 	glPopMatrix()
 	glutSwapBuffers()
 	glutPostRedisplay()
