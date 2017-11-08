@@ -22,16 +22,19 @@ class ColoredPolygon(Polygon):
 		self.b = b	
 
 
-class DegeneratedLine:
+class TemporaryLine:
 	def __init__(self, point):
 		self.startPoint = point
 		self.endPoint = Point(self.startPoint.x, self.startPoint.y)
 
-tempLine = DegeneratedLine(Point(0,0))
+tempLine = TemporaryLine(Point(0,0))
 polygons = []
 vertices = []
 clicked = False
 currentPolygon = []
+
+def doubleClick():
+	glutTimerFunc
 
 def changeSize(w, h):
 
@@ -62,14 +65,14 @@ def myMouse (button, state, x, y):
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
 		clicked = True 
 		print(point.x, point.y)
-		tempLine = DegeneratedLine(point)
+		tempLine = TemporaryLine(point)
 		currentPolygon.append(point)
 		vertices.append(point)
 		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 8:
 			del vertices[-1]
 			del currentPolygon[-1]
 			clicked = False
-			tempLine = DegeneratedLine(Point(0,0))
+			tempLine = TemporaryLine(Point(0,0))
 			poly = ColoredPolygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
 			print(poly.isConvex())
 			polygons.append(poly)
@@ -128,7 +131,7 @@ def main(argv = None):
 	window = glutCreateWindow(b'Trabalho 2 - CG - Lucas Rodrigues')
 	glClearColor(1.0, 1.0, 1.0, 1.0)
 	glMatrixMode(GL_PROJECTION)
-	gluOrtho2D(0.0, width, height, 0.0)
+	gluOrtho2D(0.0, width, 0.0, height)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glutSwapBuffers()
 	glutMouseFunc(myMouse)
