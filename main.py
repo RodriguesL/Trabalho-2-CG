@@ -63,11 +63,17 @@ def myMouse (button, state, x, y):
 		print(point.x, point.y)
 		tempLine = TemporaryLine(point)
 		currentPolygon.append(point)
-		if len(currentPolygon) > 3:
+		if len(currentPolygon) > 2:
 			lastPoint = currentPolygon[-2]
 			line = Line(point, lastPoint)
-			for i in range(len(currentPolygon) - 2):
-				testLine = Line(currentPolygon[i], currentPolygon[i+1])
+			previousPoint = None
+			for point in currentPolygon:
+				if(previousPoint is None):
+					previousPoint = point
+					continue
+				testLine = Line(previousPoint, point)
+				previousPoint = point
+				print(line.intersection(testLine))
 				if line.intersection(testLine):
 					del currentPolygon[:]
 					clicked = False
