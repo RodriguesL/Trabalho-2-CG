@@ -29,12 +29,9 @@ class TemporaryLine:
 
 tempLine = TemporaryLine(Point(0,0))
 polygons = []
-vertices = []
 clicked = False
 currentPolygon = []
 
-def doubleClick():
-	glutTimerFunc
 
 def changeSize(w, h):
 
@@ -58,7 +55,6 @@ def changeSize(w, h):
 
 def myMouse (button, state, x, y):
 	global currentPolygon
-	global vertices
 	global clicked
 	global tempLine
 	point = Point(x, y)
@@ -67,9 +63,16 @@ def myMouse (button, state, x, y):
 		print(point.x, point.y)
 		tempLine = TemporaryLine(point)
 		currentPolygon.append(point)
-		vertices.append(point)
-		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 8:
-			del vertices[-1]
+		if len(currentPolygon) > 3:
+			lastPoint = currentPolygon[-2]
+			line = Line(point, lastPoint)
+			for i in range(len(currentPolygon) - 2):
+				testLine = Line(currentPolygon[i], currentPolygon[i+1])
+				if line.intersection(testLine):
+					del currentPolygon[:]
+					clicked = False
+					tempLine = TemporaryLine(Point(0,0))
+		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
 			del currentPolygon[-1]
 			clicked = False
 			tempLine = TemporaryLine(Point(0,0))
@@ -78,18 +81,11 @@ def myMouse (button, state, x, y):
 			polygons.append(poly)
 			del currentPolygon[:]
 
-
 def mouseDrag (x, y):
 	if(clicked):
 		tempLine.endPoint.x = x
 		tempLine.endPoint.y = y
 	glutPostRedisplay()
-
-def dragPolygon (x, y):
-	oldPosition = Point(0,0)
-	mousePosition = Point(x,y)
-
-
 
 def renderScene ():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
