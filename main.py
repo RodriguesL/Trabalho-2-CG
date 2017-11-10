@@ -32,6 +32,7 @@ polygons = []
 vertices = []
 clicked = False
 currentPolygon = []
+dragging = False
 
 def doubleClick():
 	glutTimerFunc
@@ -61,9 +62,10 @@ def myMouse (button, state, x, y):
 	global vertices
 	global clicked
 	global tempLine
+	global point
 	point = Point(x, y)
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
-		clicked = True 
+		clicked = True
 		print(point.x, point.y)
 		tempLine = TemporaryLine(point)
 		currentPolygon.append(point)
@@ -86,8 +88,21 @@ def mouseDrag (x, y):
 	glutPostRedisplay()
 
 def dragPolygon (x, y):
-	oldPosition = Point(0,0)
-	mousePosition = Point(x,y)
+	global point
+	firstClick = point
+	dragPoint = Point(x,y,0)
+
+	for polygon in polygons:
+		if polygon.contains(dragPoint):
+			dragging = True
+			distx = dragPoint.x - firstClick.x
+			disty = dragPoint.y - firstClick.y
+			for p in polygon.points:
+				p.x = p.x + distx
+				p.y = p.y + disty
+	dragging = False
+	firstClick = dragPoint
+	glutPostRedisplay()
 
 
 
@@ -130,12 +145,9 @@ def main(argv = None):
 	glutInitWindowSize(width,height)
 	window = glutCreateWindow(b'Trabalho 2 - CG - Lucas Rodrigues')
 	glClearColor(1.0, 1.0, 1.0, 1.0)
-	glMatrixMode(GL_PROJECTION)
-	gluOrtho2D(0.0, width, 0.0, height)
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-	glutSwapBuffers()
 	glutMouseFunc(myMouse)
 	glutPassiveMotionFunc(mouseDrag)
+	glutMotionFunc(dragPolygon)
 	glutReshapeFunc(changeSize)
 	glutDisplayFunc(renderScene)
 	glutIdleFunc(renderScene)
