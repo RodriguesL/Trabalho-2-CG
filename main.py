@@ -15,6 +15,7 @@ class ColoredPolygon(Polygon):
 		self.r = r
 		self.g = g
 		self.b = b
+		self.dist = Point(0,0)
 
 	def setColor(self, r, g, b):
 		self.r = r
@@ -32,7 +33,6 @@ polygons = []
 clicked = False
 currentPolygon = []
 selectedPolygon = None
-dist = Point(0,0)
 
 
 def changeSize(w, h):
@@ -106,12 +106,10 @@ def myMouse (button, state, x, y):
 
 def mouseMotion(x, y):
 	global startedPoint
-	global dist
 	point = Point(x,y)
-	for pol in polygons:
-		if selectedPolygon:
-			dist.x = point.x - startedPoint.x
-			dist.y = point.y - startedPoint.y
+	if selectedPolygon:
+		selectedPolygon.dist.x = point.x - startedPoint.x
+		selectedPolygon.dist.y = point.y - startedPoint.y
 	glutPostRedisplay()
 
 def mouseDrag (x, y):
@@ -144,11 +142,9 @@ def renderScene ():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glMatrixMode (GL_MODELVIEW)
 	drawTempLines()
-	global dist
 	for polygon in polygons:
 		glPushMatrix()
-		if polygon == selectedPolygon:
-			glTranslatef(dist.x, dist.y, 0.0)
+		glTranslatef(polygon.dist.x, polygon.dist.y, 0.0)
 		drawPolygon(polygon)
 		glPopMatrix()
 	glutSwapBuffers()
