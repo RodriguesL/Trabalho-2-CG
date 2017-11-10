@@ -31,7 +31,7 @@ tempLine = TemporaryLine(Point(0,0))
 polygons = []
 clicked = False
 currentPolygon = []
-dragging = False
+selectedPolygon = None
 
 
 def changeSize(w, h):
@@ -59,38 +59,63 @@ def myMouse (button, state, x, y):
 	global clicked
 	global tempLine
 	global point
+	global selectedPolygon
+	global startedPoint
 	point = Point(x, y)
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
-		clicked = True
-		print(point.x, point.y)
-		tempLine = TemporaryLine(point)
-		currentPolygon.append(point)
-		if len(currentPolygon) > 2:
-			lastPoint = currentPolygon[-2]
-			line = Line(point, lastPoint)
-			previousPoint = None
-			for point in currentPolygon:
-				if(previousPoint is None):
-					previousPoint = point
-					continue
-				testLine = Line(previousPoint, point)
-				previousPoint = point
-				print(line.intersection(testLine))
-				if line.intersection(testLine):
-					del currentPolygon[:]
-					clicked = False
-					tempLine = TemporaryLine(Point(0,0))
-		if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
-			del currentPolygon[-1]
-			clicked = False
-			tempLine = TemporaryLine(Point(0,0))
-			poly = ColoredPolygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
-			print(poly.isConvex())
-			polygons.append(poly)
-			del currentPolygon[:]
+		for polygon in polygons:
+			if(polygon.contains(point)):
+				selectedPolygon = polygon
+				break
+		if selectedPolygon:
+			startedPoint = point
+			print("Pegou o poligono")
+		else:
+			clicked = True
+			print(point.x, point.y)
+			tempLine = TemporaryLine(point)
+			currentPolygon.append(point)
+			if len(currentPolygon) > 2:
+				lastPoint = currentPolygon[-2]
+				line = Line(point, lastPoint)
+				previousPoint = None
+				# for point in currentPolygon:
+				# 	if(previousPoint is None):
+				# 		previousPoint = point
+				# 		continue
+				# 	testLine = Line(previousPoint, point)
+				# 	previousPoint = point
+				# 	print(line.intersection(testLine))
+				# 	# if line.intersection(testLine):
+				# 	# 	del currentPolygon[:]
+				# 	# 	clicked = False
+				# 	# 	tempLine = TemporaryLine(Point(0,0))
+			if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
+				del currentPolygon[-1]
+				clicked = False
+				tempLine = TemporaryLine(Point(0,0))
+				poly = ColoredPolygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
+				polygons.append(poly)
+				del currentPolygon[:]
+
+	if button == GLUT_LEFT_BUTTON and state == GLUT_UP and selectedPolygon:
+		selectedPolygon = None
+		print("Soltou o poligono")
+
+def mouseMotion(x, y):
+	global startedPoint
+	point = Point(x,y)
+	for pol in polygons:
+		if selectedPolygon:
+			dist = point - startedPoint
+			for point in pol.points:
+				point.x += dist.x
+				point.y += dist.y
+	startedPoint = point
+	glutPostRedisplay()
 
 def mouseDrag (x, y):
-
+	point = Point(x, y)
 	if(clicked):
 		tempLine.endPoint.x = x
 		tempLine.endPoint.y = y
@@ -137,7 +162,7 @@ def main(argv = None):
 	glClearColor(1.0, 1.0, 1.0, 1.0)
 	glutMouseFunc(myMouse)
 	glutPassiveMotionFunc(mouseDrag)
-	glutMotionFunc(dragPolygon)
+	glutMotionFunc(mouseMotion)
 	glutReshapeFunc(changeSize)
 	glutDisplayFunc(renderScene)
 	glutIdleFunc(renderScene)
