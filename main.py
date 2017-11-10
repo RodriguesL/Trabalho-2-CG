@@ -32,6 +32,7 @@ polygons = []
 clicked = False
 currentPolygon = []
 selectedPolygon = None
+dist = Point(0,0)
 
 
 def changeSize(w, h):
@@ -53,6 +54,7 @@ def changeSize(w, h):
 	width = w
 	height = h
 	glViewport(0, 0, w, h)
+	glMatrixMode(GL_MODELVIEW)
 
 def myMouse (button, state, x, y):
 	global currentPolygon
@@ -75,21 +77,21 @@ def myMouse (button, state, x, y):
 			print(point.x, point.y)
 			tempLine = TemporaryLine(point)
 			currentPolygon.append(point)
-			if len(currentPolygon) > 2:
-				lastPoint = currentPolygon[-2]
-				line = Line(point, lastPoint)
-				previousPoint = None
-				# for point in currentPolygon:
-				# 	if(previousPoint is None):
-				# 		previousPoint = point
-				# 		continue
-				# 	testLine = Line(previousPoint, point)
-				# 	previousPoint = point
-				# 	print(line.intersection(testLine))
-				# 	# if line.intersection(testLine):
-				# 	# 	del currentPolygon[:]
-				# 	# 	clicked = False
-				# 	# 	tempLine = TemporaryLine(Point(0,0))
+			# if len(currentPolygon) > 2:
+			# 	lastPoint = currentPolygon[-2]
+			# 	line = Line(point, lastPoint)
+			# 	previousPoint = None
+			# 	for point in currentPolygon:
+			# 		if(previousPoint is None):
+			# 			previousPoint = point
+			# 			continue
+			# 		testLine = Line(previousPoint, point)
+			# 		previousPoint = point
+			# 		print(line.intersection(testLine))
+			# 		if line.intersection(testLine):
+			# 			del currentPolygon[:]
+			# 			clicked = False
+			# 			tempLine = TemporaryLine(Point(0,0))
 			if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
 				del currentPolygon[-1]
 				clicked = False
@@ -104,14 +106,12 @@ def myMouse (button, state, x, y):
 
 def mouseMotion(x, y):
 	global startedPoint
+	global dist
 	point = Point(x,y)
 	for pol in polygons:
 		if selectedPolygon:
-			dist = point - startedPoint
-			for point in pol.points:
-				point.x += dist.x
-				point.y += dist.y
-	startedPoint = point
+			dist.x = point.x - startedPoint.x
+			dist.y = point.y - startedPoint.y
 	glutPostRedisplay()
 
 def mouseDrag (x, y):
@@ -121,11 +121,7 @@ def mouseDrag (x, y):
 		tempLine.endPoint.y = y
 	glutPostRedisplay()
 
-def renderScene ():
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-	glPushMatrix()
-	glMatrixMode (GL_PROJECTION)
-	gluOrtho2D (0.0, width, height, 0.0)
+def drawTempLines():
 	glLineWidth(3.0)
 	glBegin(GL_LINES)
 	for i in range(1, len(currentPolygon)):
@@ -139,11 +135,22 @@ def renderScene ():
 	glVertex3f(tempLine.startPoint.x, tempLine.startPoint.y, 0.0)
 	glVertex3f(tempLine.endPoint.x, tempLine.endPoint.y, 0.0)
 	glEnd()
+
+def drawPolygon(polygon):
+	tess = tessellate(polygon)
+	glCallList(tess)
+
+def renderScene ():
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+	glMatrixMode (GL_MODELVIEW)
+	drawTempLines()
+	global dist
 	for polygon in polygons:
-		global tess
-		tess = tessellate(polygon)
-		glCallList(tess)
-	glPopMatrix()
+		glPushMatrix()
+		if polygon == selectedPolygon:
+			glTranslatef(dist.x, dist.y, 0.0)
+		drawPolygon(polygon)
+		glPopMatrix()
 	glutSwapBuffers()
 	glutPostRedisplay()
 	glFlush()
@@ -160,6 +167,7 @@ def main(argv = None):
 	glutInitWindowSize(width,height)
 	window = glutCreateWindow(b'Trabalho 2 - CG - Lucas Rodrigues')
 	glClearColor(1.0, 1.0, 1.0, 1.0)
+	gluOrtho2D (0.0, width, height, 0.0)
 	glutMouseFunc(myMouse)
 	glutPassiveMotionFunc(mouseDrag)
 	glutMotionFunc(mouseMotion)
