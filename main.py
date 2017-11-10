@@ -90,33 +90,12 @@ def myMouse (button, state, x, y):
 			del currentPolygon[:]
 
 def mouseDrag (x, y):
+
 	if(clicked):
 		tempLine.endPoint.x = x
 		tempLine.endPoint.y = y
 	glutPostRedisplay()
 
-<<<<<<< HEAD
-def dragPolygon (x, y):
-	global point
-	firstClick = point
-	dragPoint = Point(x,y,0)
-
-	for polygon in polygons:
-		if polygon.contains(dragPoint):
-			dragging = True
-			distx = dragPoint.x - firstClick.x
-			disty = dragPoint.y - firstClick.y
-			for p in polygon.points:
-				p.x = p.x + distx
-				p.y = p.y + disty
-	dragging = False
-	firstClick = dragPoint
-	glutPostRedisplay()
-
-
-
-=======
->>>>>>> 9e90d79ff716c8282fe625915e872dbff29434aa
 def renderScene ():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glPushMatrix()
