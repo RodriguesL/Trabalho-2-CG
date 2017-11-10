@@ -79,21 +79,21 @@ def myMouse (button, state, x, y):
 			print(point.x, point.y)
 			tempLine = TemporaryLine(point)
 			currentPolygon.append(point)
-			# if len(currentPolygon) > 2:
-			# 	lastPoint = currentPolygon[-2]
-			# 	line = Line(point, lastPoint)
-			# 	previousPoint = None
-			# 	for point in currentPolygon:
-			# 		if(previousPoint is None):
-			# 			previousPoint = point
-			# 			continue
-			# 		testLine = Line(previousPoint, point)
-			# 		previousPoint = point
-			# 		print(line.intersection(testLine))
-			# 		if line.intersection(testLine):
-			# 			del currentPolygon[:]
-			# 			clicked = False
-			# 			tempLine = TemporaryLine(Point(0,0))
+			if len(currentPolygon) > 2:
+				lastPoint = currentPolygon[-2]
+				line = Line(point, lastPoint)
+				previousPoint = None
+				for point in currentPolygon:
+					if(previousPoint is None):
+						previousPoint = point
+						continue
+					testLine = Line(previousPoint, point)
+					previousPoint = point
+					print(line.intersection(testLine))
+					if line.intersection(testLine):
+						del currentPolygon[:]
+						clicked = False
+						tempLine = TemporaryLine(Point(0,0))
 			if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
 				del currentPolygon[-1]
 				clicked = False
@@ -105,6 +105,11 @@ def myMouse (button, state, x, y):
 	if button == GLUT_LEFT_BUTTON and state == GLUT_UP and selectedPolygon:
 		selectedPolygon = None
 		print("Soltou o poligono")
+
+	if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
+		del currentPolygon[:]
+		clicked = False
+		tempLine = TemporaryLine(Point(0,0))
 
 def mouseMotion(x, y):
 	global startedPoint
