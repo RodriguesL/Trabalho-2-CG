@@ -5,6 +5,8 @@ import sys
 from geometry import *
 from random import uniform
 from tessellator import *
+from matrix import *
+import numpy as np
 
 width = 800
 height = 600
@@ -110,6 +112,11 @@ def mouseMotion(x, y):
 	if selectedPolygon:
 		selectedPolygon.dist.x = point.x - startedPoint.x
 		selectedPolygon.dist.y = point.y - startedPoint.y
+		matrix = np.array(translate(selectedPolygon(selectedPolygon.dist.x,selectedPolygon.dist.y,0)))
+		for pointB in selectedPolygon.points:
+			pointN = np.array([pointB.x,pointB.y,0])
+			print(np.dot(matrix,pointN))
+
 	glutPostRedisplay()
 
 def mouseDrag (x, y):
@@ -144,7 +151,7 @@ def renderScene ():
 	drawTempLines()
 	for polygon in polygons:
 		glPushMatrix()
-		glTranslatef(polygon.dist.x, polygon.dist.y, 0.0)
+		#glTranslatef(polygon.dist.x, polygon.dist.y, 0.0)
 		drawPolygon(polygon)
 		glPopMatrix()
 	glutSwapBuffers()
