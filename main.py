@@ -115,7 +115,7 @@ def mouseMotion(x, y):
 		matrix = np.array(translate(selectedPolygon.dist.x,selectedPolygon.dist.y,0))
 		for pointB in selectedPolygon.points:
 			pointN = np.array([pointB.x,pointB.y,0,0])
-			print(np.dot(matrix,pointN))
+			print(matrix.dot(pointN)
 
 	glutPostRedisplay()
 
