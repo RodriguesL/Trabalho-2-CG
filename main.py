@@ -1,3 +1,4 @@
+from __future__ import division
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
@@ -123,6 +124,7 @@ def myMouse (button, state, x, y):
 				if(polygon.contains(point)):
 					selectedPolygon = polygon
 					break
+
 			if selectedPolygon:
 				startedPoint = point
 				print("Dragging polygon")
@@ -140,9 +142,10 @@ def myMouse (button, state, x, y):
 					print("Added polygon")
 					polygons.append(poly)
 					del currentPolygon[:]
+
 				if len(currentPolygon) > 2:
 					lastPoint = currentPolygon[-2]
-					line = Line(lastPoint, point)
+					line = Line(point, lastPoint)
 					previousPoint = None
 					for p in currentPolygon:
 						if previousPoint is None:
@@ -150,13 +153,14 @@ def myMouse (button, state, x, y):
 							continue
 						if p == lastPoint:
 							break
-						testLine = Line(previousPoint, p)
+						testLine = Line(p, previousPoint)
 						previousPoint = p
 						if intersects(testLine, line):
 							print("intersects")
 							del currentPolygon[:]
 							clicked = False
 							tempLine = TemporaryLine(Point(0,0))
+
 	if (button == GLUT_LEFT_BUTTON and state == GLUT_UP):
 		selectedPolygon = None
 
@@ -166,19 +170,17 @@ def myMouse (button, state, x, y):
 def cancelPolygon():
 	global clicked
 	global tempLine
-	for p in currentPolygon:
-		allPoints.remove(p) 
 	del currentPolygon[:]
 	clicked = False
 	tempLine = TemporaryLine(Point(0,0))
 
-def rotatePolygon(actualPoint):
+def rotatePolygon(point):
 	global startedPoint
 	rotatePoint = selectedPolygon.nails[0]
 	 
 
 	startPoint = startedPoint - rotatePoint
-	anglePoint = actualPoint - rotatePoint
+	anglePoint = point - rotatePoint
 
 	inner_product = startPoint.x*anglePoint.x + startPoint.y*anglePoint.y
 
@@ -195,17 +197,17 @@ def rotatePolygon(actualPoint):
 	applyTransformationToPoints(selectedPolygon, matrix)
 	if(selectedPolygon.children):
 		applyTransformationToChildren(selectedPolygon, matrix)
-	startedPoint = actualPoint
+	startedPoint = point
 
-def translatePolygon(polygon, actualPoint):
+def translatePolygon(polygon, point):
 	global startedPoint
-	distX = actualPoint.x - startedPoint.x
-	distY = actualPoint.y - startedPoint.y
+	distX = point.x - startedPoint.x
+	distY = point.y - startedPoint.y
 	matrix = translate(distX,distY,0)
 	if(polygon.children):
 		applyTransformationToChildren(polygon, matrix)
 	applyTransformationToPoints(polygon, matrix)
-	startedPoint = actualPoint
+	startedPoint = point
 
 def applyTransformationToChildren(polygon,matrix):
 	for child in set(polygon.children):
@@ -213,14 +215,15 @@ def applyTransformationToChildren(polygon,matrix):
 		if(child.children):
 			applyTransformationToChildren(child,matrix)
 
+
 def applyTransformationToPoints(polygon,matrix):
 	matrix = np.array(matrix)
-	for point in polygon.points:
-		pointN = np.array([point.x,point.y,0,1])
+	for p in polygon.points:
+		pointN = np.array([p.x,p.y,0,1])
 		
 		result = matrix.dot(pointN)
-		point.x = result[0]
-		point.y = result[1]
+		p.x = result[0]
+		p.y = result[1]
 
 	for nail in polygon.nails:
 		pointN = np.array([nail.x,nail.y,0,1])
