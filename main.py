@@ -83,12 +83,14 @@ def myMouse (button, state, x, y):
 				lastPoint = currentPolygon[-2]
 				line = Line(point, lastPoint)
 				previousPoint = None
-				for point in currentPolygon:
-					if(previousPoint is None):
-						previousPoint = point
+				for vertex in currentPolygon:
+					if previousPoint is None:
+						previousPoint = vertex
 						continue
-					testLine = Line(previousPoint, point)
-					previousPoint = point
+					if vertex == lastPoint:
+						break
+					testLine = Line(previousPoint, vertex)
+					previousPoint = vertex
 					print(line.intersection(testLine))
 					if line.intersection(testLine):
 						del currentPolygon[:]
