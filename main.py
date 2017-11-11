@@ -7,6 +7,7 @@ from random import uniform
 from tessellator import *
 from matrix import *
 import numpy as np
+import time
 
 width = 800
 height = 600
@@ -32,10 +33,19 @@ class TemporaryLine:
 
 tempLine = TemporaryLine(Point(0,0))
 polygons = []
+nails = []
 clicked = False
 currentPolygon = []
 selectedPolygon = None
+waitingSecondClick = False
+doubleClick = False
 
+def setDoubleClick(value):
+	global waitingSecondClick
+	if waitingSecondClick:
+		doubleClick = True
+		selectedPolygon = None
+		waitingSecondClick = False
 
 def changeSize(w, h):
 
@@ -65,8 +75,15 @@ def myMouse (button, state, x, y):
 	global point
 	global selectedPolygon
 	global startedPoint
+	global waitingSecondClick
 	point = Point(x, y)
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+		if any(polygon.contains(point) for polygon in polygons):
+			waitingSecondClick = True
+			glutTimerFunc(100, setDoubleClick, None)
+			if doubleClick:
+				nails.append(point)
+				print(nails)
 		for polygon in polygons:
 			if(polygon.contains(point)):
 				selectedPolygon = polygon
@@ -157,6 +174,13 @@ def drawTempLines():
 def drawPolygon(polygon):
 	tess = tessellate(polygon)
 	glCallList(tess)
+
+def drawNails():
+	glPointSize(5.0)
+	glBegin(GL_POINTS)
+	for nail in nails:
+		glColor3f(105,105,105)
+		glVertex3f(nails.x, nails.y, 1.0)
 
 def renderScene ():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
