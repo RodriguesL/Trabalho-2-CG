@@ -79,6 +79,13 @@ def myMouse (button, state, x, y):
 			print(point.x, point.y)
 			tempLine = TemporaryLine(point)
 			currentPolygon.append(point)
+			if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
+				del currentPolygon[-1]
+				clicked = False
+				tempLine = TemporaryLine(Point(0,0))
+				poly = ColoredPolygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
+				polygons.append(poly)
+				del currentPolygon[:]
 			if len(currentPolygon) > 2:
 				lastPoint = currentPolygon[-2]
 				line = Line(point, lastPoint)
@@ -96,13 +103,7 @@ def myMouse (button, state, x, y):
 						del currentPolygon[:]
 						clicked = False
 						tempLine = TemporaryLine(Point(0,0))
-			if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 10:
-				del currentPolygon[-1]
-				clicked = False
-				tempLine = TemporaryLine(Point(0,0))
-				poly = ColoredPolygon(currentPolygon[:], uniform(0,1), uniform(0,1), uniform(0,1))
-				polygons.append(poly)
-				del currentPolygon[:]
+			
 
 	if button == GLUT_LEFT_BUTTON and state == GLUT_UP and selectedPolygon:
 		selectedPolygon = None
