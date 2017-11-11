@@ -37,15 +37,6 @@ nails = []
 clicked = False
 currentPolygon = []
 selectedPolygon = None
-waitingSecondClick = False
-doubleClick = False
-
-def setDoubleClick(value):
-	global waitingSecondClick
-	if waitingSecondClick:
-		doubleClick = True
-		selectedPolygon = None
-		waitingSecondClick = False
 
 def changeSize(w, h):
 
@@ -78,12 +69,6 @@ def myMouse (button, state, x, y):
 	global waitingSecondClick
 	point = Point(x, y)
 	if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
-		if any(polygon.contains(point) for polygon in polygons):
-			waitingSecondClick = True
-			glutTimerFunc(100, setDoubleClick, None)
-			if doubleClick:
-				nails.append(point)
-				print(nails)
 		for polygon in polygons:
 			if(polygon.contains(point)):
 				selectedPolygon = polygon
@@ -115,7 +100,7 @@ def myMouse (button, state, x, y):
 						break
 					testLine = Line(previousPoint, vertex)
 					previousPoint = vertex
-					print(line.intersection(testLine))
+					print(testLine.intersection(line))
 					if line.intersection(testLine):
 						del currentPolygon[:]
 						clicked = False
@@ -127,9 +112,9 @@ def myMouse (button, state, x, y):
 		print("Soltou o poligono")
 
 	if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
-		del currentPolygon[:]
-		clicked = False
-		tempLine = TemporaryLine(Point(0,0))
+		if any(polygon.contains(point) for polygon in polygons):
+			print("Prego colocado")
+			nails.append(point)
 
 def mouseMotion(x, y):
 	global startedPoint
@@ -176,21 +161,23 @@ def drawPolygon(polygon):
 	glCallList(tess)
 
 def drawNails():
-	glPointSize(5.0)
+	glPointSize(10.0)
 	glBegin(GL_POINTS)
 	for nail in nails:
-		glColor3f(105,105,105)
-		glVertex3f(nails.x, nails.y, 1.0)
+		glColor3f(0.3,0.3,0.3)
+		glVertex3f(nail.x, nail.y, 0.0)
+	glEnd()
 
 def renderScene ():
+	glEnable(GL_POINT_SMOOTH)
+	glEnable(GL_LINE_SMOOTH)
+	glEnable(GL_POLYGON_SMOOTH)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glMatrixMode (GL_MODELVIEW)
 	drawTempLines()
 	for polygon in polygons:
-		glPushMatrix()
-		#glTranslatef(polygon.dist.x, polygon.dist.y, 0.0)
 		drawPolygon(polygon)
-		glPopMatrix()
+	drawNails()
 	glutSwapBuffers()
 	glutPostRedisplay()
 	glFlush()
@@ -214,6 +201,7 @@ def main(argv = None):
 	glutReshapeFunc(changeSize)
 	glutDisplayFunc(renderScene)
 	glutIdleFunc(renderScene)
+	print("Instrucao: Botao direito do mouse coloca os pregos")
 	glutMainLoop()
 
 if __name__=="__main__":
