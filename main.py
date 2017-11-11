@@ -104,20 +104,19 @@ def myMouse (button, state, x, y):
 				if(children):
 					if(removeNail):
 						nails.remove(removeNail)
-						print("RemoveNail")
+						print("Removed nail")
 						for child in children:
 							parent.children.remove(child)
 							child.parents.remove(parent)
 							child.nails.remove(removeNail)
 					else:
 						nails.append(nail)
-						print("Nail")
+						print("Nail placed")
 						parent.children += children
 						for child in children:
 							child.parents.append(parent)
 							child.nails.append(nail)
-
-			
+	
 		else:
 			doubleClick = DoubleClick(time())
 			for polygon in reversed(polygons):
@@ -126,7 +125,7 @@ def myMouse (button, state, x, y):
 					break
 			if selectedPolygon:
 				startedPoint = point
-				print("Pegou o poligono")
+				print("Dragging polygon")
 
 			else:
 				clicked = True
@@ -138,12 +137,12 @@ def myMouse (button, state, x, y):
 					clicked = False
 					tempLine = TemporaryLine(Point(0,0))
 					poly = ColoredPolygon(currentPolygon[:],uniform(0,1), uniform(0,1), uniform(0,1))
-					print("Adicionou Polygon")
+					print("Added polygon")
 					polygons.append(poly)
 					del currentPolygon[:]
 				if len(currentPolygon) > 2:
 					lastPoint = currentPolygon[-2]
-					line = Line(point, lastPoint)
+					line = Line(lastPoint, point)
 					previousPoint = None
 					for p in currentPolygon:
 						if previousPoint is None:
@@ -153,7 +152,7 @@ def myMouse (button, state, x, y):
 							break
 						testLine = Line(previousPoint, p)
 						previousPoint = p
-						if intersects(line, testLine):
+						if intersects(testLine, line):
 							print("intersects")
 							del currentPolygon[:]
 							clicked = False
@@ -173,13 +172,13 @@ def cancelPolygon():
 	clicked = False
 	tempLine = TemporaryLine(Point(0,0))
 
-def rotatePolygon(point):
+def rotatePolygon(actualPoint):
 	global startedPoint
 	rotatePoint = selectedPolygon.nails[0]
 	 
 
 	startPoint = startedPoint - rotatePoint
-	anglePoint = point - rotatePoint
+	anglePoint = actualPoint - rotatePoint
 
 	inner_product = startPoint.x*anglePoint.x + startPoint.y*anglePoint.y
 
@@ -196,38 +195,38 @@ def rotatePolygon(point):
 	applyTransformationToPoints(selectedPolygon, matrix)
 	if(selectedPolygon.children):
 		applyTransformationToChildren(selectedPolygon, matrix)
-	startedPoint = point
+	startedPoint = actualPoint
 
-def translatePolygon(polygon, point):
+def translatePolygon(polygon, actualPoint):
 	global startedPoint
-	distX = point.x - startedPoint.x
-	distY = point.y - startedPoint.y
+	distX = actualPoint.x - startedPoint.x
+	distY = actualPoint.y - startedPoint.y
 	matrix = translate(distX,distY,0)
 	if(polygon.children):
 		applyTransformationToChildren(polygon, matrix)
 	applyTransformationToPoints(polygon, matrix)
-	startedPoint = point
+	startedPoint = actualPoint
 
 def applyTransformationToChildren(polygon,matrix):
-	for child in polygon.children:
+	for child in set(polygon.children):
 		applyTransformationToPoints(child,matrix)
 		if(child.children):
 			applyTransformationToChildren(child,matrix)
 
 def applyTransformationToPoints(polygon,matrix):
 	matrix = np.array(matrix)
-	for p in polygon.points:
-		pointN = np.array([p.x,p.y,0,1])
+	for point in polygon.points:
+		pointN = np.array([point.x,point.y,0,1])
 		
 		result = matrix.dot(pointN)
-		p.x = result[0]
-		p.y = result[1]
+		point.x = result[0]
+		point.y = result[1]
 
-	for p in polygon.nails:
-		pointN = np.array([p.x,p.y,0,1])
+	for nail in polygon.nails:
+		pointN = np.array([nail.x,nail.y,0,1])
 		result = matrix.dot(pointN)
-		p.x = result[0]
-		p.y = result[1]
+		nail.x = result[0]
+		nail.y = result[1]
 
 def intersects(l1, l2):
 	
