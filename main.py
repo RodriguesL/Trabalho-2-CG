@@ -54,6 +54,8 @@ clicked = False
 currentPolygon = []
 selectedPolygon = None
 doubleClick = DoubleClick(time())
+transformedChildren = []
+transformedNails = []
 
 def changeSize(w, h):
 
@@ -74,6 +76,23 @@ def changeSize(w, h):
 	width = w
 	height = h
 	glViewport(0, 0, w, h)
+
+def canTranslate(polygon, children):
+	for child in children:
+		for parent in child.parents:
+			if polygons.index(polygon) > polygons.index(parent) or len(child.parents) >= 2:
+				return False
+		if(child.children):
+			return canTranslate(polygon, child.children)
+	return True
+
+def canRotate(polygon):
+	for child in polygon.children:
+		if len(child.parents) >= 2:
+			return False
+		elif(child.children):
+			return canRotate(child)
+	return True
 
 def myMouse (button, state, x, y):
 	global currentPolygon
@@ -111,13 +130,16 @@ def myMouse (button, state, x, y):
 							child.parents.remove(parent)
 							child.nails.remove(removeNail)
 					else:
-						nails.append(nail)
-						print("Nail placed")
-						parent.children += children
-						for child in children:
-							child.parents.append(parent)
-							child.nails.append(nail)
-	
+						if polygon.parents:
+							continue
+						else:
+							nails.append(nail)
+							print("Nail placed")
+							parent.children += children
+							for child in children:
+								child.parents.append(parent)
+								child.nails.append(nail)
+		
 		else:
 			doubleClick = DoubleClick(time())
 			for polygon in reversed(polygons):
@@ -177,7 +199,6 @@ def cancelPolygon():
 def rotatePolygon(point):
 	global startedPoint
 	rotatePoint = selectedPolygon.nails[0]
-	 
 
 	startPoint = startedPoint - rotatePoint
 	anglePoint = point - rotatePoint
@@ -251,16 +272,20 @@ def intersects(l1, l2):
 
 def mouseMotion(x, y):
 	global startedPoint
+	global transformedNails
+	global transformedChildren
 	point = Point(x,y)
-	if(selectedPolygon is not None):
-		if(selectedPolygon.parents and len(selectedPolygon.nails) == 1):
+	if selectedPolygon is not None:
+		if selectedPolygon.parents and len(selectedPolygon.nails) == 1 and canRotate(selectedPolygon):
 			rotatePolygon(point)
-		elif(not selectedPolygon.parents):
+		elif not selectedPolygon.parents and canTranslate(selectedPolygon, selectedPolygon.children):
 			translatePolygon(selectedPolygon, point)
+	transformedChildren = []
+	transformedNails = []
 
 def mouseDrag (x, y):
 	point = Point(x, y)
-	if(clicked):
+	if clicked:
 		tempLine.endPoint.x = point.x
 		tempLine.endPoint.y = point.y
 	glutPostRedisplay()
