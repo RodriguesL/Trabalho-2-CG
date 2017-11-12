@@ -1,3 +1,9 @@
+## @package main
+# The main function, where all the critical parts of the implementation are.
+#
+# @author Lucas Rodrigues
+#
+
 from __future__ import division
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
@@ -9,43 +15,10 @@ from tessellator import *
 from matrix import *
 import numpy as np
 from time import time
+from additional_classes import *
 
 width = 800
 height = 600
-
-class ColoredPolygon(Polygon):
-	def __init__(self,points, r, g, b):
-		super(ColoredPolygon, self ).__init__(points)
-		self.r = r
-		self.g = g
-		self.b = b
-		self.parents = []
-		self.children = []
-		self.nails = []
-
-
-	def setColor(self, r, g, b):
-		self.r = r
-		self.g = g
-		self.b = b
-
-	def centerPoint(self):
-		box = Box()
-		for p in self.points:
-			box.add(p)
-		return box.centre()
-
-class DoubleClick(object):
-	def __init__(self, time):
-		self.time = time
-
-	def isDoubleClicked(self, finalTime):
-		return finalTime - self.time < 0.2
-
-class TemporaryLine:
-	def __init__(self, point):
-		self.startPoint = point
-		self.endPoint = Point(self.startPoint.x, self.startPoint.y)
 
 tempLine = TemporaryLine(Point(0,0))
 polygons = []
@@ -57,6 +30,10 @@ doubleClick = DoubleClick(time())
 transformedChildren = []
 transformedNails = []
 
+## Function to resize the window
+# @param w The screen width
+# @param h The screen height
+#
 def changeSize(w, h):
 
 	# Prevent a divide by zero, when window is too short
@@ -77,6 +54,11 @@ def changeSize(w, h):
 	height = h
 	glViewport(0, 0, w, h)
 
+## Function that determines whether if a polygon can be translated based on its position in the hierarchy.
+# @param polygon The polygon being tested
+# @param children The list of polygons that are below polygon on the hierarchy
+# @return Returns true if the polygon can be translated, and False otherwise
+#
 def canTranslate(polygon, children):
 	for child in children:
 		for parent in child.parents:
@@ -86,6 +68,10 @@ def canTranslate(polygon, children):
 			return canTranslate(polygon, child.children)
 	return True
 
+## Function that determines whether if a polygon can be rotated based on its position in the hierarchy.
+# @param polygon The polygon being tested
+# @return Returns true if the polygon can be rotated, and False otherwise
+#
 def canRotate(polygon):
 	for child in polygon.children:
 		if len(child.parents) >= 2:
@@ -94,6 +80,12 @@ def canRotate(polygon):
 			return canRotate(child)
 	return True
 
+## Callback function to handle mouse input
+# @param button The mouse button
+# @param state Determines whether the button was pressed or released
+# @param x The x coordinate of the mouse
+# @param y The y coordinate of the mouse
+#
 def myMouse (button, state, x, y):
 	global currentPolygon
 	global clicked
@@ -130,9 +122,7 @@ def myMouse (button, state, x, y):
 							child.parents.remove(parent)
 							child.nails.remove(removeNail)
 					else:
-						if polygon.parents:
-							continue
-						else:
+						if not polygon.parents:
 							nails.append(nail)
 							print("Nail placed")
 							parent.children += children
@@ -189,6 +179,8 @@ def myMouse (button, state, x, y):
 	if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
 		cancelPolygon()
 
+## Function that cancels the polygon that is being currently drawn
+#
 def cancelPolygon():
 	global clicked
 	global tempLine
@@ -196,6 +188,9 @@ def cancelPolygon():
 	clicked = False
 	tempLine = TemporaryLine(Point(0,0))
 
+## Function that rotates a polygon using the given point as axis.
+# @param point The point which will be used as the rotation axis
+#
 def rotatePolygon(point):
 	global startedPoint
 	rotatePoint = selectedPolygon.nails[0]
@@ -220,6 +215,10 @@ def rotatePolygon(point):
 		applyTransformationToChildren(selectedPolygon, matrix)
 	startedPoint = point
 
+## Function that translates the polygon to a point of destination
+# @param polygon The polygon being translated
+# @param point The point to which the polygon will be translated to
+#
 def translatePolygon(polygon, point):
 	global startedPoint
 	distX = point.x - startedPoint.x
@@ -230,13 +229,20 @@ def translatePolygon(polygon, point):
 	applyTransformationToPoints(polygon, matrix)
 	startedPoint = point
 
+## Function that applies transformations to their children in the hierarchy
+# @param polygon The parent polygon
+# @param matrix The transformation matrix being applied
+#
 def applyTransformationToChildren(polygon,matrix):
 	for child in set(polygon.children):
 		applyTransformationToPoints(child,matrix)
 		if(child.children):
 			applyTransformationToChildren(child,matrix)
 
-
+## Function that applies the transformation to points (nails)
+# @param polygon The polygon which has the nails
+# @param matrix The transformation matrix being applied
+# 
 def applyTransformationToPoints(polygon,matrix):
 	matrix = np.array(matrix)
 	for p in polygon.points:
@@ -251,7 +257,12 @@ def applyTransformationToPoints(polygon,matrix):
 		result = matrix.dot(pointN)
 		nail.x = result[0]
 		nail.y = result[1]
-
+## Function that checks whether two lines intersect
+#
+# This function is used to cancel the drawing of autointersecting polygons
+# @param l1 A line
+# @param l2 The other line
+#
 def intersects(l1, l2):
 	
 	vector1 = Point(0,0)
@@ -269,7 +280,10 @@ def intersects(l1, l2):
 	if (s >= 0 and s <= 1 and t >= 0 and t <= 1):
 		return True
 	return False
-
+## Callback function used to monitor the mouse motion while clicked
+# @param x The x coordinate of the mouse
+# @param y The y coordinate of the mouse
+#
 def mouseMotion(x, y):
 	global startedPoint
 	global transformedNails
@@ -283,6 +297,10 @@ def mouseMotion(x, y):
 	transformedChildren = []
 	transformedNails = []
 
+## Callback function that passively monitors mouse motion
+# @param x The x coordinate of the mouse
+# @param y The y coordinate of the mouse
+#
 def mouseDrag (x, y):
 	point = Point(x, y)
 	if clicked:
@@ -290,6 +308,8 @@ def mouseDrag (x, y):
 		tempLine.endPoint.y = point.y
 	glutPostRedisplay()
 
+## Function that draws the temporary lines that represent the polygon edges
+#
 def drawTempLines():
 	glLineWidth(3.0)
 	glBegin(GL_LINES)
@@ -305,18 +325,26 @@ def drawTempLines():
 	glVertex3f(tempLine.endPoint.x, tempLine.endPoint.y, 0.0)
 	glEnd()
 
+## Function that draws the polygons
+# @param polygon The polygon being drawn
+#
 def drawPolygon(polygon):
 	tess = tessellate(polygon)
 	glCallList(tess)
 
+## Function that draws the nails
+# @param polygon The polygon which has nails associated to it
+#
 def drawNails(polygon):
 	glPointSize(10.0)
 	glBegin(GL_POINTS)
 	for nail in polygon.nails:
-		glColor3f(0.3,0.3,0.3)
+		glColor3f(0,0,0)
 		glVertex3f(nail.x, nail.y, 0.0)
 	glEnd()
 
+## Callback function that renders the scene
+#
 def renderScene ():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glEnable(GL_POINT_SMOOTH)
@@ -333,6 +361,8 @@ def renderScene ():
 	glutPostRedisplay()
 	glFlush()
 
+## Main function
+#
 def main(argv = None):
 	global window
 
@@ -352,6 +382,9 @@ def main(argv = None):
 	glutIdleFunc(renderScene)
 	glutDisplayFunc(renderScene)
 	glutIdleFunc(renderScene)
+	print("Left button: place polygon vertices")
+	print("Right button: cancel drawing")
+	print("Double click: place/remove nail")
 	glutMainLoop()
 
 if __name__=="__main__":

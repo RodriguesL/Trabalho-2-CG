@@ -1,0 +1,75 @@
+\hypertarget{namespacetessellator}{}\section{tessellator Namespace Reference}
+\label{namespacetessellator}\index{tessellator@{tessellator}}
+
+
+Module responsible for utilizing the G\+LU Tessellator.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacetessellator_a5047a345487c0e5eb12f5c4b39352aee}{tess\+Error\+CB} (error\+Code)
+\begin{DoxyCompactList}\small\item\em Callback function that prints errors. \end{DoxyCompactList}\item 
+def \hyperlink{namespacetessellator_a9a6e675f7596610cd3118348185ef51f}{tessellate} (polygon)
+\begin{DoxyCompactList}\small\item\em Function that applies tessellation to a given polygon. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacetessellator_a25b6e9fa1ab6a41e1ed8ff68f83f385a}\label{namespacetessellator_a25b6e9fa1ab6a41e1ed8ff68f83f385a}} 
+list {\bfseries aux} = \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Module responsible for utilizing the G\+LU Tessellator. 
+
+\begin{DoxyAuthor}{Author}
+Lucas Rodrigues 
+\end{DoxyAuthor}
+\begin{DoxySeeAlso}{See also}
+songho.\+ca/opengl/gl\+\_\+tessellation.html 
+\end{DoxySeeAlso}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacetessellator_a9a6e675f7596610cd3118348185ef51f}\label{namespacetessellator_a9a6e675f7596610cd3118348185ef51f}} 
+\index{tessellator@{tessellator}!tessellate@{tessellate}}
+\index{tessellate@{tessellate}!tessellator@{tessellator}}
+\subsubsection{\texorpdfstring{tessellate()}{tessellate()}}
+{\footnotesize\ttfamily def tessellator.\+tessellate (\begin{DoxyParamCaption}\item[{}]{polygon }\end{DoxyParamCaption})}
+
+
+
+Function that applies tessellation to a given polygon. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em polygon} & The polygon being drawn \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The identifier of the display list 
+\end{DoxyReturn}
+
+
+Definition at line 23 of file tessellator.\+py.
+
+\mbox{\Hypertarget{namespacetessellator_a5047a345487c0e5eb12f5c4b39352aee}\label{namespacetessellator_a5047a345487c0e5eb12f5c4b39352aee}} 
+\index{tessellator@{tessellator}!tess\+Error\+CB@{tess\+Error\+CB}}
+\index{tess\+Error\+CB@{tess\+Error\+CB}!tessellator@{tessellator}}
+\subsubsection{\texorpdfstring{tess\+Error\+C\+B()}{tessErrorCB()}}
+{\footnotesize\ttfamily def tessellator.\+tess\+Error\+CB (\begin{DoxyParamCaption}\item[{}]{error\+Code }\end{DoxyParamCaption})}
+
+
+
+Callback function that prints errors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\+Code} & The corresponding error code \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 16 of file tessellator.\+py.
+

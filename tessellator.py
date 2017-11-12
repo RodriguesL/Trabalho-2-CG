@@ -1,13 +1,25 @@
+## @package tessellator
+# 
+# Module responsible for utilizing the GLU Tessellator
+# @author Lucas Rodrigues
+# @see songho.ca/opengl/gl_tessellation.html
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 aux = []
 
+## Callback function that prints errors
+# @param errorCode The corresponding error code
+#
 def tessErrorCB(errorCode):
     errorStr = gluErrorString(errorCode)
     print("[ERROR]: " + errorStr)
-
+## Function that applies tessellation to a given polygon
+# @param polygon The polygon being drawn
+# @return The identifier of the display list
+#
 def tessellate(polygon):
     global aux
     Id = glGenLists(1)

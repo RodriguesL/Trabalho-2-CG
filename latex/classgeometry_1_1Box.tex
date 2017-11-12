@@ -1,0 +1,301 @@
+\hypertarget{classgeometry_1_1Box}{}\section{geometry.\+Box Class Reference}
+\label{classgeometry_1_1Box}\index{geometry.\+Box@{geometry.\+Box}}
+
+
+A bounging box is the smallest rectangle, aligned with the coordinate axes, which contain a given set of points.  
+
+
+Inheritance diagram for geometry.\+Box\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classgeometry_1_1Box}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classgeometry_1_1Box_acd3c4e947c8bc7e6fe8efe8a05842238}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self)
+\item 
+def \hyperlink{classgeometry_1_1Box_a9fed11ac430eeb493f1f9101ed50e570}{\+\_\+\+\_\+getitem\+\_\+\+\_\+} (self, ind)
+\item 
+def \hyperlink{classgeometry_1_1Box_afa830f6acc2fe66f4e9fb8a27921570f}{\+\_\+\+\_\+setitem\+\_\+\+\_\+} (self, ind, val)
+\item 
+\mbox{\Hypertarget{classgeometry_1_1Box_a8a830538d3a7a8e9022e55d3135d55a4}\label{classgeometry_1_1Box_a8a830538d3a7a8e9022e55d3135d55a4}} 
+def {\bfseries \+\_\+\+\_\+str\+\_\+\+\_\+} (self)
+\item 
+def \hyperlink{classgeometry_1_1Box_ad6bd218082264a42a11c0d36ff3f8ff1}{\+\_\+\+\_\+cmp\+\_\+\+\_\+} (self, b)
+\item 
+def \hyperlink{classgeometry_1_1Box_a4b0f4675b22c67b531b00459cf6858b5}{add} (self, p)
+\item 
+def \hyperlink{classgeometry_1_1Box_af184892d7008637d2d34a9cc4fa4fdd5}{contains} (self, p)
+\item 
+def \hyperlink{classgeometry_1_1Box_af22304a33ca2c58b7ca21427608602e0}{contains2} (self, p)
+\item 
+def \hyperlink{classgeometry_1_1Box_aaab7456e78cc5b951e1b832b6816d332}{centre} (self)
+\item 
+def \hyperlink{classgeometry_1_1Box_af876b4d7ab7286682103a064e96f43d6}{len} (self)
+\item 
+def \hyperlink{classgeometry_1_1Box_a6bd75c486ba4bb587c3003484be1bc6d}{outside\+Position} (self)
+\item 
+def \hyperlink{classgeometry_1_1Box_a2af13fbaf9c38d904e05d73e35b5f9f9}{set\+Parameters} (self)
+\item 
+def \hyperlink{classgeometry_1_1Box_af671baed782da60af8058570b2f6bfa9}{normalize} (self, p)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classgeometry_1_1Box_aaa2928bad8272b83deb2cbe543b68c66}{ready}
+\begin{DoxyCompactList}\small\item\em Set for lazy calculation of normalization parameters. \end{DoxyCompactList}\item 
+\hyperlink{classgeometry_1_1Box_a6bf768dc4c7628cc2fe863eb3a002475}{bbox}
+\begin{DoxyCompactList}\small\item\em A list with two points\+: the lower left corner and upper right corner of this box. \end{DoxyCompactList}\item 
+\hyperlink{classgeometry_1_1Box_a43781b0f4c451cbb542c20b5fbd4b5dd}{sx}
+\begin{DoxyCompactList}\small\item\em Scale factor x. \end{DoxyCompactList}\item 
+\hyperlink{classgeometry_1_1Box_a0e744b5244823afefa01b40c2613037f}{tx}
+\begin{DoxyCompactList}\small\item\em Translation factor x. \end{DoxyCompactList}\item 
+\hyperlink{classgeometry_1_1Box_a223765001a3661705685ed85647a54ff}{sy}
+\begin{DoxyCompactList}\small\item\em Scale factor y. \end{DoxyCompactList}\item 
+\hyperlink{classgeometry_1_1Box_aca0410b99a6d8b59060f6fcbf12db160}{ty}
+\begin{DoxyCompactList}\small\item\em Translation factor y. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A bounging box is the smallest rectangle, aligned with the coordinate axes, which contain a given set of points. 
+
+In CG, it can be used as an approximation for a geometric shape.\begin{DoxyVerb}A class for computing bounding boxes.\end{DoxyVerb}
+ 
+
+Definition at line 581 of file geometry.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classgeometry_1_1Box_acd3c4e947c8bc7e6fe8efe8a05842238}\label{classgeometry_1_1Box_acd3c4e947c8bc7e6fe8efe8a05842238}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Constructs an invalid bouding box.\end{DoxyVerb}
+ 
+
+Definition at line 584 of file geometry.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classgeometry_1_1Box_ad6bd218082264a42a11c0d36ff3f8ff1}\label{classgeometry_1_1Box_ad6bd218082264a42a11c0d36ff3f8ff1}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!\+\_\+\+\_\+cmp\+\_\+\+\_\+@{\+\_\+\+\_\+cmp\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+cmp\+\_\+\+\_\+@{\+\_\+\+\_\+cmp\+\_\+\+\_\+}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+cmp\+\_\+\+\_\+()}{\_\_cmp\_\_()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+\_\+\+\_\+cmp\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{b }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return < 0 if self < b, 
+  > 0 if self > b,
+    0 if self = b
+\end{DoxyVerb}
+ 
+
+Definition at line 605 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a9fed11ac430eeb493f1f9101ed50e570}\label{classgeometry_1_1Box_a9fed11ac430eeb493f1f9101ed50e570}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!\+\_\+\+\_\+getitem\+\_\+\+\_\+@{\+\_\+\+\_\+getitem\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+getitem\+\_\+\+\_\+@{\+\_\+\+\_\+getitem\+\_\+\+\_\+}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+getitem\+\_\+\+\_\+()}{\_\_getitem\_\_()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+\_\+\+\_\+getitem\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ind }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Indexing operator.\end{DoxyVerb}
+ 
+
+Definition at line 592 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_afa830f6acc2fe66f4e9fb8a27921570f}\label{classgeometry_1_1Box_afa830f6acc2fe66f4e9fb8a27921570f}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!\+\_\+\+\_\+setitem\+\_\+\+\_\+@{\+\_\+\+\_\+setitem\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+setitem\+\_\+\+\_\+@{\+\_\+\+\_\+setitem\+\_\+\+\_\+}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+setitem\+\_\+\+\_\+()}{\_\_setitem\_\_()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+\_\+\+\_\+setitem\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ind,  }\item[{}]{val }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Indexing operator.\end{DoxyVerb}
+ 
+
+Definition at line 596 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a4b0f4675b22c67b531b00459cf6858b5}\label{classgeometry_1_1Box_a4b0f4675b22c67b531b00459cf6858b5}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!add@{add}}
+\index{add@{add}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+add (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{p }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Adds a new point to the bounding box.\end{DoxyVerb}
+ 
+
+Definition at line 613 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_aaab7456e78cc5b951e1b832b6816d332}\label{classgeometry_1_1Box_aaab7456e78cc5b951e1b832b6816d332}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!centre@{centre}}
+\index{centre@{centre}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{centre()}{centre()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+centre (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return the centre of the box.\end{DoxyVerb}
+ 
+
+Definition at line 642 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_af184892d7008637d2d34a9cc4fa4fdd5}\label{classgeometry_1_1Box_af184892d7008637d2d34a9cc4fa4fdd5}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!contains@{contains}}
+\index{contains@{contains}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+contains (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{p }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return whether this box contains point p.\end{DoxyVerb}
+ 
+
+Definition at line 629 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_af22304a33ca2c58b7ca21427608602e0}\label{classgeometry_1_1Box_af22304a33ca2c58b7ca21427608602e0}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!contains2@{contains2}}
+\index{contains2@{contains2}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{contains2()}{contains2()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+contains2 (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{p }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return whether this box contains point p.\end{DoxyVerb}
+ 
+
+Definition at line 636 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_af876b4d7ab7286682103a064e96f43d6}\label{classgeometry_1_1Box_af876b4d7ab7286682103a064e96f43d6}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!len@{len}}
+\index{len@{len}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{len()}{len()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+len (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return the length (a vector) of the box.\end{DoxyVerb}
+ 
+
+Definition at line 646 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_af671baed782da60af8058570b2f6bfa9}\label{classgeometry_1_1Box_af671baed782da60af8058570b2f6bfa9}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!normalize@{normalize}}
+\index{normalize@{normalize}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{normalize()}{normalize()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+normalize (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{p }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Normalize the given point.\end{DoxyVerb}
+ 
+
+Definition at line 670 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a6bd75c486ba4bb587c3003484be1bc6d}\label{classgeometry_1_1Box_a6bd75c486ba4bb587c3003484be1bc6d}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!outside\+Position@{outside\+Position}}
+\index{outside\+Position@{outside\+Position}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{outside\+Position()}{outsidePosition()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+outside\+Position (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return a point outside the box.\end{DoxyVerb}
+ 
+
+Definition at line 650 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a2af13fbaf9c38d904e05d73e35b5f9f9}\label{classgeometry_1_1Box_a2af13fbaf9c38d904e05d73e35b5f9f9}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!set\+Parameters@{set\+Parameters}}
+\index{set\+Parameters@{set\+Parameters}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{set\+Parameters()}{setParameters()}}
+{\footnotesize\ttfamily def geometry.\+Box.\+set\+Parameters (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculates the parameters to a normalized box.\end{DoxyVerb}
+ 
+
+Definition at line 655 of file geometry.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classgeometry_1_1Box_a6bf768dc4c7628cc2fe863eb3a002475}\label{classgeometry_1_1Box_a6bf768dc4c7628cc2fe863eb3a002475}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!bbox@{bbox}}
+\index{bbox@{bbox}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{bbox}{bbox}}
+{\footnotesize\ttfamily geometry.\+Box.\+bbox}
+
+
+
+A list with two points\+: the lower left corner and upper right corner of this box. 
+
+
+
+Definition at line 590 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_aaa2928bad8272b83deb2cbe543b68c66}\label{classgeometry_1_1Box_aaa2928bad8272b83deb2cbe543b68c66}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!ready@{ready}}
+\index{ready@{ready}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{ready}{ready}}
+{\footnotesize\ttfamily geometry.\+Box.\+ready}
+
+
+
+Set for lazy calculation of normalization parameters. 
+
+
+
+Definition at line 588 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a43781b0f4c451cbb542c20b5fbd4b5dd}\label{classgeometry_1_1Box_a43781b0f4c451cbb542c20b5fbd4b5dd}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!sx@{sx}}
+\index{sx@{sx}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{sx}{sx}}
+{\footnotesize\ttfamily geometry.\+Box.\+sx}
+
+
+
+Scale factor x. 
+
+
+
+Definition at line 659 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a223765001a3661705685ed85647a54ff}\label{classgeometry_1_1Box_a223765001a3661705685ed85647a54ff}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!sy@{sy}}
+\index{sy@{sy}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{sy}{sy}}
+{\footnotesize\ttfamily geometry.\+Box.\+sy}
+
+
+
+Scale factor y. 
+
+
+
+Definition at line 664 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_a0e744b5244823afefa01b40c2613037f}\label{classgeometry_1_1Box_a0e744b5244823afefa01b40c2613037f}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!tx@{tx}}
+\index{tx@{tx}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{tx}{tx}}
+{\footnotesize\ttfamily geometry.\+Box.\+tx}
+
+
+
+Translation factor x. 
+
+
+
+Definition at line 661 of file geometry.\+py.
+
+\mbox{\Hypertarget{classgeometry_1_1Box_aca0410b99a6d8b59060f6fcbf12db160}\label{classgeometry_1_1Box_aca0410b99a6d8b59060f6fcbf12db160}} 
+\index{geometry\+::\+Box@{geometry\+::\+Box}!ty@{ty}}
+\index{ty@{ty}!geometry\+::\+Box@{geometry\+::\+Box}}
+\subsubsection{\texorpdfstring{ty}{ty}}
+{\footnotesize\ttfamily geometry.\+Box.\+ty}
+
+
+
+Translation factor y. 
+
+
+
+Definition at line 666 of file geometry.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+geometry.\+py\end{DoxyCompactItemize}
