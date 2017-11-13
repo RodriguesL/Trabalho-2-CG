@@ -8,14 +8,10 @@ The main function, where all the critical parts of the implementation are.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-def \hyperlink{namespacemain_a526cfe84f4e80095febf0d3f4b7b5358}{change\+Size} (w, h)
-\begin{DoxyCompactList}\small\item\em Function to resize the window. \end{DoxyCompactList}\item 
 def \hyperlink{namespacemain_a88fcd4aa7193703d53a8095e78a40fe9}{can\+Translate} (polygon, children)
 \begin{DoxyCompactList}\small\item\em Function that determines whether if a polygon can be translated based on its position in the hierarchy. \end{DoxyCompactList}\item 
 def \hyperlink{namespacemain_ae1d466859928a06baa89a7b9279f4fa1}{can\+Rotate} (polygon)
 \begin{DoxyCompactList}\small\item\em Function that determines whether if a polygon can be rotated based on its position in the hierarchy. \end{DoxyCompactList}\item 
-def \hyperlink{namespacemain_a0f7b954a9ec1b9e21e5d888e630d1ed0}{my\+Mouse} (button, state, x, y)
-\begin{DoxyCompactList}\small\item\em Callback function to handle mouse input. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{namespacemain_a9641b8c073c7079e597f39b5f7f6cf0d}\label{namespacemain_a9641b8c073c7079e597f39b5f7f6cf0d}} 
 def \hyperlink{namespacemain_a9641b8c073c7079e597f39b5f7f6cf0d}{cancel\+Polygon} ()
 \begin{DoxyCompactList}\small\item\em Function that cancels the polygon that is being currently drawn. \end{DoxyCompactList}\item 
@@ -29,10 +25,6 @@ def \hyperlink{namespacemain_a69cc12fb1c27fecdfcac61f5d4e917b9}{apply\+Transform
 \begin{DoxyCompactList}\small\item\em Function that applies the transformation to points (nails) \end{DoxyCompactList}\item 
 def \hyperlink{namespacemain_afa0ac21cfc8ed3c2c3cfddd6ea6899b6}{intersects} (l1, l2)
 \begin{DoxyCompactList}\small\item\em Function that checks whether two lines intersect. \end{DoxyCompactList}\item 
-def \hyperlink{namespacemain_aac29b4e8c9fa3c64c062e76290492fb8}{mouse\+Motion} (x, y)
-\begin{DoxyCompactList}\small\item\em Callback function used to monitor the mouse motion while clicked. \end{DoxyCompactList}\item 
-def \hyperlink{namespacemain_a33eac5e1e174927a801f847ff8c2d484}{mouse\+Drag} (x, y)
-\begin{DoxyCompactList}\small\item\em Callback function that passively monitors mouse motion. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{namespacemain_aa9279d9a799d74c5bf21beff5da0062a}\label{namespacemain_aa9279d9a799d74c5bf21beff5da0062a}} 
 def \hyperlink{namespacemain_aa9279d9a799d74c5bf21beff5da0062a}{draw\+Temp\+Lines} ()
 \begin{DoxyCompactList}\small\item\em Function that draws the temporary lines that represent the polygon edges. \end{DoxyCompactList}\item 
@@ -40,6 +32,14 @@ def \hyperlink{namespacemain_a923e8cecbed43bf133611a409c40c107}{draw\+Polygon} (
 \begin{DoxyCompactList}\small\item\em Function that draws the polygons. \end{DoxyCompactList}\item 
 def \hyperlink{namespacemain_a020b084aad026564a4c7ee5af1ac6b91}{draw\+Nails} (polygon)
 \begin{DoxyCompactList}\small\item\em Function that draws the nails. \end{DoxyCompactList}\item 
+def \hyperlink{namespacemain_a526cfe84f4e80095febf0d3f4b7b5358}{change\+Size} (w, h)
+\begin{DoxyCompactList}\small\item\em Function to resize the window. \end{DoxyCompactList}\item 
+def \hyperlink{namespacemain_a0f7b954a9ec1b9e21e5d888e630d1ed0}{my\+Mouse} (button, state, x, y)
+\begin{DoxyCompactList}\small\item\em Callback function to handle mouse input. \end{DoxyCompactList}\item 
+def \hyperlink{namespacemain_aac29b4e8c9fa3c64c062e76290492fb8}{mouse\+Motion} (x, y)
+\begin{DoxyCompactList}\small\item\em Callback function used to monitor the mouse motion while clicked. \end{DoxyCompactList}\item 
+def \hyperlink{namespacemain_a33eac5e1e174927a801f847ff8c2d484}{mouse\+Drag} (x, y)
+\begin{DoxyCompactList}\small\item\em Callback function that passively monitors mouse motion. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{namespacemain_a9258848a9cd7db8568ec88c7846c4768}\label{namespacemain_a9258848a9cd7db8568ec88c7846c4768}} 
 def \hyperlink{namespacemain_a9258848a9cd7db8568ec88c7846c4768}{render\+Scene} ()
 \begin{DoxyCompactList}\small\item\em Callback function that renders the scene. \end{DoxyCompactList}\item 
@@ -112,7 +112,7 @@ Function that applies transformations to their children in the hierarchy.
 \end{DoxyParams}
 
 
-Definition at line 236 of file main.\+py.
+Definition at line 114 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a69cc12fb1c27fecdfcac61f5d4e917b9}\label{namespacemain_a69cc12fb1c27fecdfcac61f5d4e917b9}} 
 \index{main@{main}!apply\+Transformation\+To\+Points@{apply\+Transformation\+To\+Points}}
@@ -133,7 +133,7 @@ Function that applies the transformation to points (nails)
 \end{DoxyParams}
 
 
-Definition at line 246 of file main.\+py.
+Definition at line 124 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_ae1d466859928a06baa89a7b9279f4fa1}\label{namespacemain_ae1d466859928a06baa89a7b9279f4fa1}} 
 \index{main@{main}!can\+Rotate@{can\+Rotate}}
@@ -155,7 +155,7 @@ Returns true if the polygon can be rotated, and False otherwise
 \end{DoxyReturn}
 
 
-Definition at line 75 of file main.\+py.
+Definition at line 50 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a88fcd4aa7193703d53a8095e78a40fe9}\label{namespacemain_a88fcd4aa7193703d53a8095e78a40fe9}} 
 \index{main@{main}!can\+Translate@{can\+Translate}}
@@ -179,7 +179,7 @@ Returns true if the polygon can be translated, and False otherwise
 \end{DoxyReturn}
 
 
-Definition at line 62 of file main.\+py.
+Definition at line 37 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a526cfe84f4e80095febf0d3f4b7b5358}\label{namespacemain_a526cfe84f4e80095febf0d3f4b7b5358}} 
 \index{main@{main}!change\+Size@{change\+Size}}
@@ -200,7 +200,7 @@ Function to resize the window.
 \end{DoxyParams}
 
 
-Definition at line 37 of file main.\+py.
+Definition at line 204 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a020b084aad026564a4c7ee5af1ac6b91}\label{namespacemain_a020b084aad026564a4c7ee5af1ac6b91}} 
 \index{main@{main}!draw\+Nails@{draw\+Nails}}
@@ -219,7 +219,7 @@ Function that draws the nails.
 \end{DoxyParams}
 
 
-Definition at line 338 of file main.\+py.
+Definition at line 192 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a923e8cecbed43bf133611a409c40c107}\label{namespacemain_a923e8cecbed43bf133611a409c40c107}} 
 \index{main@{main}!draw\+Polygon@{draw\+Polygon}}
@@ -238,7 +238,7 @@ Function that draws the polygons.
 \end{DoxyParams}
 
 
-Definition at line 331 of file main.\+py.
+Definition at line 185 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_afa0ac21cfc8ed3c2c3cfddd6ea6899b6}\label{namespacemain_afa0ac21cfc8ed3c2c3cfddd6ea6899b6}} 
 \index{main@{main}!intersects@{intersects}}
@@ -257,9 +257,12 @@ This function is used to cancel the drawing of autointersecting polygons
 {\em l2} & The other line \\
 \hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns True if the lines intersect, and False otherwise 
+\end{DoxyReturn}
 
 
-Definition at line 266 of file main.\+py.
+Definition at line 144 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a33eac5e1e174927a801f847ff8c2d484}\label{namespacemain_a33eac5e1e174927a801f847ff8c2d484}} 
 \index{main@{main}!mouse\+Drag@{mouse\+Drag}}
@@ -280,7 +283,7 @@ Callback function that passively monitors mouse motion.
 \end{DoxyParams}
 
 
-Definition at line 304 of file main.\+py.
+Definition at line 348 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_aac29b4e8c9fa3c64c062e76290492fb8}\label{namespacemain_aac29b4e8c9fa3c64c062e76290492fb8}} 
 \index{main@{main}!mouse\+Motion@{mouse\+Motion}}
@@ -301,7 +304,7 @@ Callback function used to monitor the mouse motion while clicked.
 \end{DoxyParams}
 
 
-Definition at line 287 of file main.\+py.
+Definition at line 331 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_a0f7b954a9ec1b9e21e5d888e630d1ed0}\label{namespacemain_a0f7b954a9ec1b9e21e5d888e630d1ed0}} 
 \index{main@{main}!my\+Mouse@{my\+Mouse}}
@@ -326,7 +329,7 @@ Callback function to handle mouse input.
 \end{DoxyParams}
 
 
-Definition at line 89 of file main.\+py.
+Definition at line 230 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_abfe7963151804b73036937ad486f55ac}\label{namespacemain_abfe7963151804b73036937ad486f55ac}} 
 \index{main@{main}!rotate\+Polygon@{rotate\+Polygon}}
@@ -345,7 +348,7 @@ Function that rotates a polygon using the given point as axis.
 \end{DoxyParams}
 
 
-Definition at line 194 of file main.\+py.
+Definition at line 72 of file main.\+py.
 
 \mbox{\Hypertarget{namespacemain_adeb2cd76f03836777dd43cb9bc133d89}\label{namespacemain_adeb2cd76f03836777dd43cb9bc133d89}} 
 \index{main@{main}!translate\+Polygon@{translate\+Polygon}}
@@ -366,5 +369,5 @@ Function that translates the polygon to a point of destination.
 \end{DoxyParams}
 
 
-Definition at line 222 of file main.\+py.
+Definition at line 100 of file main.\+py.
 

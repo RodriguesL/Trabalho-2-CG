@@ -3,7 +3,6 @@
 #
 # @author Lucas Rodrigues
 #
-
 from __future__ import division
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
@@ -29,30 +28,6 @@ selectedPolygon = None
 doubleClick = DoubleClick(time())
 transformedChildren = []
 transformedNails = []
-
-## Function to resize the window
-# @param w The screen width
-# @param h The screen height
-#
-def changeSize(w, h):
-
-	# Prevent a divide by zero, when window is too short
-	# (you cant make a window of zero width).
-	if h == 0:
-		h = 1
-
-	ratio = 1.0* w / h
-
-	# Reset the coordinate system before modifying
-	glMatrixMode(GL_PROJECTION)
-	glLoadIdentity()
-	global height
-	global width
-	
-	# Set the viewport to be the entire window
-	width = w
-	height = h
-	glViewport(0, 0, w, h)
 
 ## Function that determines whether if a polygon can be translated based on its position in the hierarchy.
 # @param polygon The polygon being tested
@@ -80,110 +55,13 @@ def canRotate(polygon):
 			return canRotate(child)
 	return True
 
-## Callback function to handle mouse input
-# @param button The mouse button
-# @param state Determines whether the button was pressed or released
-# @param x The x coordinate of the mouse
-# @param y The y coordinate of the mouse
-#
-def myMouse (button, state, x, y):
-	global currentPolygon
-	global clicked
-	global tempLine
-	global selectedPolygon
-	global startedPoint
-	global doubleClick
-	if (button == GLUT_LEFT_BUTTON and state == GLUT_DOWN):
-		point = Point(x,y)
-		if(doubleClick.isDoubleClicked(time())):
-			cancelPolygon()
-			firstPolygon = True
-			children = []
-			parent = None
-			removeNail = None 
-			for nail in nails:
-				if nail.dist(point) <= 15:
-					removeNail = nail
-
-			for polygon in polygons:
-				if(polygon.contains(point)):
-					if(firstPolygon):
-						parent = polygon
-						nail = point
-						firstPolygon = False
-					else:
-						children.append(polygon)
-				if(children):
-					if(removeNail):
-						nails.remove(removeNail)
-						print("Removed nail")
-						for child in children:
-							parent.children.remove(child)
-							child.parents.remove(parent)
-							child.nails.remove(removeNail)
-					else:
-						if not polygon.parents:
-							nails.append(nail)
-							print("Nail placed")
-							parent.children += children
-							for child in children:
-								child.parents.append(parent)
-								child.nails.append(nail)
-		
-		else:
-			doubleClick = DoubleClick(time())
-			for polygon in reversed(polygons):
-				if(polygon.contains(point)):
-					selectedPolygon = polygon
-					break
-
-			if selectedPolygon:
-				startedPoint = point
-				print("Dragging polygon")
-
-			else:
-				clicked = True
-				tempLine = TemporaryLine(point)
-				currentPolygon.append(point)
-
-				if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 15:
-					del currentPolygon[-1]
-					clicked = False
-					tempLine = TemporaryLine(Point(0,0))
-					poly = ColoredPolygon(currentPolygon[:],uniform(0,1), uniform(0,1), uniform(0,1))
-					print("Added polygon")
-					polygons.append(poly)
-					del currentPolygon[:]
-
-				if len(currentPolygon) > 2:
-					lastPoint = currentPolygon[-2]
-					line = Line(point, lastPoint)
-					previousPoint = None
-					for p in currentPolygon:
-						if previousPoint is None:
-							previousPoint = p
-							continue
-						if p == lastPoint:
-							break
-						testLine = Line(p, previousPoint)
-						previousPoint = p
-						if intersects(testLine, line):
-							print("intersects")
-							del currentPolygon[:]
-							clicked = False
-							tempLine = TemporaryLine(Point(0,0))
-
-	if (button == GLUT_LEFT_BUTTON and state == GLUT_UP):
-		selectedPolygon = None
-
-	if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
-		cancelPolygon()
 
 ## Function that cancels the polygon that is being currently drawn
 #
 def cancelPolygon():
 	global clicked
 	global tempLine
+	global currentPolygon
 	del currentPolygon[:]
 	clicked = False
 	tempLine = TemporaryLine(Point(0,0))
@@ -262,7 +140,7 @@ def applyTransformationToPoints(polygon,matrix):
 # This function is used to cancel the drawing of autointersecting polygons
 # @param l1 A line
 # @param l2 The other line
-#
+# @return Returns True if the lines intersect, and False otherwise
 def intersects(l1, l2):
 	
 	vector1 = Point(0,0)
@@ -280,37 +158,13 @@ def intersects(l1, l2):
 	if (s >= 0 and s <= 1 and t >= 0 and t <= 1):
 		return True
 	return False
-## Callback function used to monitor the mouse motion while clicked
-# @param x The x coordinate of the mouse
-# @param y The y coordinate of the mouse
-#
-def mouseMotion(x, y):
-	global startedPoint
-	global transformedNails
-	global transformedChildren
-	point = Point(x,y)
-	if selectedPolygon is not None:
-		if selectedPolygon.parents and len(selectedPolygon.nails) == 1 and canRotate(selectedPolygon):
-			rotatePolygon(point)
-		elif not selectedPolygon.parents and canTranslate(selectedPolygon, selectedPolygon.children):
-			translatePolygon(selectedPolygon, point)
-	transformedChildren = []
-	transformedNails = []
 
-## Callback function that passively monitors mouse motion
-# @param x The x coordinate of the mouse
-# @param y The y coordinate of the mouse
-#
-def mouseDrag (x, y):
-	point = Point(x, y)
-	if clicked:
-		tempLine.endPoint.x = point.x
-		tempLine.endPoint.y = point.y
-	glutPostRedisplay()
 
 ## Function that draws the temporary lines that represent the polygon edges
 #
 def drawTempLines():
+	global currentPolygon
+	global tempLine
 	glLineWidth(3.0)
 	glBegin(GL_LINES)
 	for i in range(1, len(currentPolygon)):
@@ -342,6 +196,161 @@ def drawNails(polygon):
 		glColor3f(0,0,0)
 		glVertex3f(nail.x, nail.y, 0.0)
 	glEnd()
+
+## Function to resize the window
+# @param w The screen width
+# @param h The screen height
+#
+def changeSize(w, h):
+
+	# Prevent a divide by zero, when window is too short
+	# (you cant make a window of zero width).
+	if h == 0:
+		h = 1
+
+	ratio = 1.0* w / h
+
+	# Reset the coordinate system before modifying
+	glMatrixMode(GL_PROJECTION)
+	glLoadIdentity()
+	global height
+	global width
+	
+	# Set the viewport to be the entire window
+	width = w
+	height = h
+	glViewport(0, 0, w, h)
+
+## Callback function to handle mouse input
+# @param button The mouse button
+# @param state Determines whether the button was pressed or released
+# @param x The x coordinate of the mouse
+# @param y The y coordinate of the mouse
+#
+def myMouse (button, state, x, y):
+	global currentPolygon
+	global clicked
+	global tempLine
+	global selectedPolygon
+	global startedPoint
+	global doubleClick
+	if (button == GLUT_LEFT_BUTTON and state == GLUT_DOWN):
+		point = Point(x,y)
+		if(doubleClick.isDoubleClicked(time())):
+			cancelPolygon()
+			firstPolygon = True
+			children = []
+			parent = None
+			removeNail = None 
+			for nail in nails:
+				if nail.dist(point) <= 15:
+					removeNail = nail
+
+			for polygon in polygons:
+				if(polygon.contains(point)):
+					if(firstPolygon):
+						parent = polygon
+						nail = point
+						firstPolygon = False
+					else:
+						children.append(polygon)
+				if(children):
+					if(removeNail):
+						if(removeNail in nails):
+							nails.remove(removeNail)
+						for child in children:
+							if(child in parent.children):
+								parent.children.remove(child)
+							if (parent in child.parents):
+								child.parents.remove(parent)
+							try:
+								child.nails.remove(removeNail)
+							except ValueError:
+								pass
+					else:
+						if polygon.parents:
+							continue
+						else:
+							nails.append(nail)
+							parent.children += children
+							for child in children:
+								if parent not in child.parents:
+									child.parents.append(parent)
+									child.nails.append(nail)
+		
+		else:
+			doubleClick = DoubleClick(time())
+			for polygon in reversed(polygons):
+				if(polygon.contains(point)):
+					selectedPolygon = polygon
+					break
+
+			if selectedPolygon:
+				startedPoint = point
+
+			else:
+				clicked = True
+				tempLine = TemporaryLine(point)
+				currentPolygon.append(point)
+
+				if len(currentPolygon) > 2 and currentPolygon[-1].dist(currentPolygon[0]) <= 15:
+					del currentPolygon[-1]
+					clicked = False
+					tempLine = TemporaryLine(Point(0,0))
+					poly = ColoredPolygon(currentPolygon[:],uniform(0,1), uniform(0,1), uniform(0,1))
+					polygons.append(poly)
+					del currentPolygon[:]
+
+				if len(currentPolygon) > 2:
+					lastPoint = currentPolygon[-2]
+					line = Line(point, lastPoint)
+					previousPoint = None
+					for p in currentPolygon:
+						if previousPoint is None:
+							previousPoint = p
+							continue
+						if p == lastPoint:
+							break
+						testLine = Line(p, previousPoint)
+						previousPoint = p
+						if intersects(testLine, line):
+							del currentPolygon[:]
+							clicked = False
+							tempLine = TemporaryLine(Point(0,0))
+
+	if (button == GLUT_LEFT_BUTTON and state == GLUT_UP):
+		selectedPolygon = None
+
+	if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
+		cancelPolygon()
+
+## Callback function used to monitor the mouse motion while clicked
+# @param x The x coordinate of the mouse
+# @param y The y coordinate of the mouse
+#
+def mouseMotion(x, y):
+	global startedPoint
+	global transformedNails
+	global transformedChildren
+	point = Point(x,y)
+	if selectedPolygon is not None:
+		if selectedPolygon.parents and len(selectedPolygon.nails) == 1 and canRotate(selectedPolygon):
+			rotatePolygon(point)
+		elif not selectedPolygon.parents and canTranslate(selectedPolygon, selectedPolygon.children):
+			translatePolygon(selectedPolygon, point)
+	transformedChildren = []
+	transformedNails = []
+
+## Callback function that passively monitors mouse motion
+# @param x The x coordinate of the mouse
+# @param y The y coordinate of the mouse
+#
+def mouseDrag (x, y):
+	point = Point(x, y)
+	if clicked:
+		tempLine.endPoint.x = point.x
+		tempLine.endPoint.y = point.y
+	glutPostRedisplay()
 
 ## Callback function that renders the scene
 #
